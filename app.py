@@ -52,6 +52,13 @@ def listar_pacientes():
     lista = [{"id": p.id, "nome": p.nome} for p in pacientes]
     return jsonify(lista)
 
+@app.route('/api/pacientes/<int: id>', methods=['GET'])
+def listar_paciente(id):
+    paciente = Paciente.query.get(id)
+    if paciente:
+        return jsonify({"id": id, "nome": paciente.nome}), 200
+
+
 @app.route('/api/pacientes', methods=['POST'])
 def registro_paciente():
     data = request.get_json()

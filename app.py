@@ -63,6 +63,18 @@ def registro_paciente():
     return jsonify({"erro": "Nome inválido"}), 400
 
 
+@app.route('/api/pacientes', methods=['DELETE'])
+def eliminar_paciente():
+    data = request.get_json()
+    nome = data['nome']
+    if nome:
+        deletar_paciente(nome)
+    return jsonify({"mensagem": "Paciente criado"}), 201
+
+    return jsonify({"erro": "Nome inválido"}), 400
+
+
+
 if __name__ == '__main__':
     with app.app_context():
         db.create_all()  # Cria o banco e as tabelas se não existirem

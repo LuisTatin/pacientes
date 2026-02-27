@@ -1,16 +1,8 @@
 from flask import Flask, render_template, request, redirect, url_for, jsonify
 from flask_sqlalchemy import SQLAlchemy
-from werkzeug.utils import secure_filename
-from flask import send_from_directory
 import os
 
 app = Flask(__name__)
-
-#Pasta de Upload
-UPLOAD_FOLDER = "uploads"
-app.config["UPLOAD_FOLDER"] = UPLOAD_FOLDER
-
-
 
 # Configuração do banco de dados SQLite persistente
 BASE_DIR = os.path.abspath(os.path.dirname(__file__))
@@ -25,7 +17,6 @@ db = SQLAlchemy(app)
 class Paciente(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     nome = db.Column(db.String(100), nullable=False)
-    foto = db.Column(db.String(200))  # novo campo
 
     def __repr__(self):
         return f"<Paciente {self.nome}>"
@@ -46,22 +37,7 @@ def index():
         nome = request.form.get('nome')
         acao = request.form.get('acao')
         if nome and acao == 'cadastrar':
-            arquivo = request.files.get("foto")
-            nome_arquivo = None
-
-            if arquivo and arquivo.filename != "":
-                nome_arquivo = secure_filename(arquivo.filename)
-                caminho = os.path.join(app.config["UPLOAD_FOLDER"], nome_arquivo)
-                arquivo.save(caminho)
-
-            novo_paciente = Paciente(
-                nome=nome,
-                foto=nome_arquivo
-            )
-
-            db.session.add(novo_paciente)
-            db.session.commit()
-
+            cadastrar_paciente(nome)
         if nome and acao == 'deletar':
             deletar_paciente(nome)
 
@@ -70,30 +46,10 @@ def index():
     pacientes = Paciente.query.all()
     return render_template('home.html', pacientes=pacientes)
 
-@app.route('/uploads/<filename>')
-def uploaded_file(filename):
-    return send_from_directory(app.config['UPLOAD_FOLDER'], filename)
-
-
 @app.route('/api/pacientes', methods=['GET'])
 def listar_pacientes():
-
-    id_paciente = request.args.get('id')
-
-    if id_paciente:
-        paciente = Paciente.query.get(id_paciente)
-
-        if paciente:
-            return jsonify({
-                "id": paciente.id,
-                "nome": paciente.nome
-            })
-        else:
-            return jsonify({"erro": "Paciente não encontrado"}), 404
-
     pacientes = Paciente.query.all()
     lista = [{"id": p.id, "nome": p.nome} for p in pacientes]
-
     return jsonify(lista)
 
 @app.route('/api/pacientes', methods=['POST'])
@@ -117,38 +73,6 @@ def api_deletar(id):
         return jsonify({"mensagem": "Paciente deletado"})
 
     return jsonify({"erro": "Paciente não encontrado"}), 404
-
-
-@app.route('/api/pacientes/upload', methods=['POST'])
-def api_upload():
-
-    nome = request.form.get("nome")
-    arquivo = request.files.get("foto")
-
-    if not nome:
-        return jsonify({"erro": "Nome obrigatório"}), 400
-
-    nome_arquivo = None
-
-    if arquivo and arquivo.filename != "":
-        nome_arquivo = secure_filename(arquivo.filename)
-        caminho = os.path.join(app.config["UPLOAD_FOLDER"], nome_arquivo)
-        arquivo.save(caminho)
-
-    novo = Paciente(nome=nome, foto=nome_arquivo)
-    db.session.add(novo)
-    db.session.commit()
-
-    return jsonify({"mensagem": "Paciente criado com foto"})
-
-
-
-
-
-
-
-
-
 
 
 

@@ -53,10 +53,10 @@ def listar_pacientes():
         paciente = Paciente.query.get(data['id'])
         if paciente:
             return jsonify({"id": paciente.id, "nome": paciente.nome}), 200
-    else:
-        pacientes = Paciente.query.all()
-        lista = [{"id": p.id, "nome": p.nome} for p in pacientes]
-        return jsonify(lista)
+
+    pacientes = Paciente.query.all()
+    lista = [{"id": p.id, "nome": p.nome} for p in pacientes]
+    return jsonify(lista)
 
 @app.route('/api/pacientes', methods=['POST'])
 def registro_paciente():

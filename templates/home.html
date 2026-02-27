@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Cadastro de Pacientes</title>
+</head>
+<body>
+
+    <h1>Cadastro de Pacientes</h1>
+
+    <form method="POST">
+        <label>Nome do Paciente:</label>
+        <input type="text" name="nome" required>
+        <button type="submit" name="acao" value="cadastrar">Cadastrar</button>
+        <button type="submit" name="acao" value="deletar">Deletar</button>
+    </form>
+
+    <hr>
+
+    <h2>Pacientes Cadastrados</h2>
+
+    <ul>
+        {% for paciente in pacientes %}
+            <li>{{ paciente.nome }}</li>
+        {% endfor %}
+    </ul>
+
+</body>
+</html>

@@ -63,15 +63,16 @@ def registro_paciente():
     return jsonify({"erro": "Nome inválido"}), 400
 
 
-@app.route('/api/pacientes', methods=['DELETE'])
-def eliminar_paciente():
-    data = request.get_json()
-    nome = data['nome']
-    if nome:
-        deletar_paciente(nome)
-    return jsonify({"mensagem": "Paciente criado"}), 201
+@app.route('/api/pacientes/<int:id>', methods=['DELETE'])
+def api_deletar(id):
+    paciente = Paciente.query.get(id)
 
-    return jsonify({"erro": "Nome inválido"}), 400
+    if paciente:
+        db.session.delete(paciente)
+        db.session.commit()
+        return jsonify({"mensagem": "Paciente deletado"})
+
+    return jsonify({"erro": "Paciente não encontrado"}), 404
 
 
 

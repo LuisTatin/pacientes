@@ -50,7 +50,7 @@ def index():
 def listar_pacientes():
     data = request.get_json()
     if data['id']:
-        paciente = Paciente.query.get(id)
+        paciente = Paciente.query.get(data['id'])
         if paciente:
             return jsonify({"id": paciente.id, "nome": paciente.nome}), 200
     else:

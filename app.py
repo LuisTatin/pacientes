@@ -52,6 +52,15 @@ def listar_pacientes():
     lista = [{"id": p.id, "nome": p.nome} for p in pacientes]
     return jsonify(lista)
 
+@app.route('/api/pacientes', methods=['POST'])
+def registro_paciente():
+    data = request.get_json()
+    nome = data['nome']
+    if nome:
+        cadastrar_paciente(nome)
+        return jsonify({"mensagem": "Paciente criado"}), 201
+
+    return jsonify({"erro": "Nome inválido"}), 400
 
 
 if __name__ == '__main__':

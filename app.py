@@ -46,6 +46,12 @@ def index():
     pacientes = Paciente.query.all()
     return render_template('home.html', pacientes=pacientes)
 
+@app.route('/api/pacientes', methods=['GET'])
+def listar_pacientes():
+    pacientes = Paciente.query.all()
+    return pacientes
+
+
 if __name__ == '__main__':
     with app.app_context():
         db.create_all()  # Cria o banco e as tabelas se não existirem

@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, render_template, request, redirect, url_for, jsonify
 from flask_sqlalchemy import SQLAlchemy
 import os
 
@@ -49,7 +49,9 @@ def index():
 @app.route('/api/pacientes', methods=['GET'])
 def listar_pacientes():
     pacientes = Paciente.query.all()
-    return pacientes
+    lista = [{"id": p.id, "nome": p.nome} for p in pacientes]
+    return jsonify(lista)
+
 
 
 if __name__ == '__main__':

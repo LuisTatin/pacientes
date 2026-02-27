@@ -7,22 +7,32 @@
 
     <h1>Cadastro de Pacientes</h1>
 
-    <form method="POST">
-        <label>Nome do Paciente:</label>
-        <input type="text" name="nome" required>
-        <button type="submit" name="acao" value="cadastrar">Cadastrar</button>
-        <button type="submit" name="acao" value="deletar">Deletar</button>
-    </form>
+<form method="POST" enctype="multipart/form-data">
+    <label>Nome do Paciente:</label>
+    <input type="text" name="nome" required>
 
+    <label>Foto:</label>
+    <input type="file" name="foto">
+
+    <button type="submit" name="acao" value="cadastrar">Cadastrar</button>
+    <button type="submit" name="acao" value="deletar">Deletar</button>
+</form>
     <hr>
 
     <h2>Pacientes Cadastrados</h2>
 
-    <ul>
-        {% for paciente in pacientes %}
-            <li>{{ paciente.nome }}</li>
-        {% endfor %}
-    </ul>
+<ul>
+{% for paciente in pacientes %}
+    <li>
+        {{ paciente.nome }}
+
+        {% if paciente.foto %}
+            <br>
+            <img src="/uploads/{{ paciente.foto }}" width="150">
+        {% endif %}
+    </li>
+{% endfor %}
+</ul>
 
 </body>
 </html>

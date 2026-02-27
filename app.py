@@ -9,7 +9,7 @@ app = Flask(__name__)
 #Configuração de Pastas de Arquivos
 UPLOAD_FOLDER = "uploads"
 app.config["UPLOAD_FOLDER"] = UPLOAD_FOLDER
-
+os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 
 
 # Configuração do banco de dados SQLite persistente

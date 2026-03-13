@@ -96,6 +96,7 @@ def buscar_paciente(id):
             "nome": paciente.nome,
             "foto": paciente.foto
         })
+    return jsonify({"erro": "Paciente não encontrado"}), 404
 
 
 @app.route('/api/pacientes/<int:id>', methods=['DELETE'])

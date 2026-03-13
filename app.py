@@ -90,6 +90,12 @@ def registro_paciente():
 @app.route('/api/pacientes/<int:id>', methods=['GET'])
 def buscar_paciente(id):
     paciente = Paciente.query.get(id)
+    if paciente:
+        return jsonify({
+            "id": paciente.id,
+            "nome": paciente.nome,
+            "foto": paciente.foto
+        })
 
 
 @app.route('/api/pacientes/<int:id>', methods=['DELETE'])
